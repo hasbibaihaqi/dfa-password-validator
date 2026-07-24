@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFA Auth — Tentang DFA</title>
+    <meta name="description" content="Informasi tentang konsep Deterministic Finite Automaton (DFA) dan pengaplikasiannya pada validasi kata sandi.">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Main Modular CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        .concept-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .concept-card:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 212, 255, 0.15);
+        }
+        .concept-icon {
+            font-size: 1.5rem;
+            color: var(--clr-primary);
+            margin-bottom: 1rem;
+        }
+        .concept-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 0.75rem;
+        }
+        .concept-text {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+        .dfa-tuple-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .dfa-tuple-list li {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .dfa-tuple-list li:last-child {
+            border-bottom: none;
+        }
+        .tuple-symbol {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--clr-primary);
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+            background: var(--clr-primary-dim);
+            border-radius: 8px;
+            padding: 0.2rem;
+        }
+        .tuple-desc {
+            flex: 1;
+        }
+        .tuple-title {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        .tuple-detail {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Mobile Sidebar Toggle -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+    <i class="bi bi-list"></i>
+</button>
+
+<!-- App Wrapper -->
+<div class="app-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="glass-sidebar" id="sidebar">
+        <a href="/" class="sidebar-brand" style="text-decoration:none;">
+            <div class="brand-icon-wrap"><i class="bi bi-shield-lock-fill"></i></div>
+            <div class="brand-text">
+                <span class="brand-name">DFA Auth</span>
+                <span class="brand-sub">Password Validator</span>
+            </div>
+        </a>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Menu</div>
+            <a href="/" class="sidebar-link" id="nav-validator">
+                <i class="bi bi-key-fill nav-icon"></i><span class="nav-label">Validator</span>
+            </a>
+            <a href="/dashboard" class="sidebar-link" id="nav-dashboard">
+                <i class="bi bi-speedometer2 nav-icon"></i><span class="nav-label">Dashboard</span>
+            </a>
+            <div class="nav-section-label" style="margin-top:1rem;">Informasi</div>
+            <a href="/about" class="sidebar-link active" id="nav-about">
+                <i class="bi bi-diagram-3 nav-icon"></i><span class="nav-label">Tentang DFA</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p class="sidebar-footer-text">DFA Auth v1.0 &copy; 2025</p>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header fade-in">
+            <div class="page-header-left">
+                <h1>Tentang DFA</h1>
+                <p>Teori Automata pada Sistem Keamanan</p>
+            </div>
+            <div class="header-badge">
+                <span class="dot"></span>
+                Educational Mode
+            </div>
+        </div>
+
+        <div class="vertical-stack">
+
+            <!-- Card 1: Pengantar DFA -->
+            <div class="glass-card p-4 fade-in fade-in-delay-1">
+                <div class="card-header-custom">
+                    <div class="card-icon cyan"><i class="bi bi-book"></i></div>
+                    <div>
+                        <div class="card-title">Apa itu Deterministic Finite Automaton (DFA)?</div>
+                        <div class="card-subtitle">Pengantar Konsep Teori Bahasa dan Automata</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.6; text-align: justify; margin-bottom: 1.5rem;">
+                            <strong>Deterministic Finite Automaton (DFA)</strong> adalah mesin abstrak pada Teori Automata yang menerima atau menolak string (barisan simbol) dengan memindahkan statusnya (state) dari satu keadaan ke keadaan lain secara berurutan. DFA bersifat <em>Deterministic</em> karena untuk setiap state dan setiap simbol input yang diberikan, hanya ada tepat satu state tujuan berikutnya. Tidak ada ambiguitas atau tebakan dalam transisi.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="concept-card">
+                            <i class="bi bi-cpu concept-icon"></i>
+                            <div class="concept-title">Finite State (Keadaan Terhingga)</div>
+                            <div class="concept-text">
+                                Mesin memiliki jumlah <em>state</em> yang terhingga. Ia tidak memiliki memori tambahan selain state yang sedang ia tempati saat ini.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="concept-card">
+                            <i class="bi bi-arrow-right-circle concept-icon"></i>
+                            <div class="concept-title">Deterministic Transition</div>
+                            <div class="concept-text">
+                                Untuk setiap karakter pada kata sandi yang diketik, arah mesin berpindah sangat pasti dan tunggal. Tidak memiliki transisi ke state kosong (epsilon).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: 5 Tuple DFA -->
+            <div class="glass-card p-4 fade-in fade-in-delay-2">
+                <div class="card-header-custom">
+                    <div class="card-icon purple"><i class="bi bi-braces"></i></div>
+                    <div>
+                        <div class="card-title">Definisi Formal (5 Tuple)</div>
+                        <div class="card-subtitle">M= (Q, Σ, δ, q0, F)</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="dfa-tuple-list">
+                            <li>
+                                <div class="tuple-symbol">Q</div>
+                                <div class="tuple-desc">
+                                    <div class="tuple-title">Himpunan Terhingga dari State</div>
+                                    <div class="tuple-detail">
+                                        Dalam aplikasi ini mewakili kombinasi kondisi sandi (misal <code>q_&lt;1,0,0,0&gt;</code> artinya hanya memiliki huruf kecil).
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tuple-symbol">Σ</div>
+                                <div class="tuple-desc">
+                                    <div class="tuple-title">Alfabet (Simbol Input)</div>
+                                    <div class="tuple-detail">
+                                        Himpunan karakter keyboard yang diizinkan untuk diketik, seperti huruf [a-zA-Z], angka [0-9], dan karakter khusus.
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tuple-symbol">δ</div>
+                                <div class="tuple-desc">
+                                    <div class="tuple-title">Fungsi Transisi</div>
+                                    <div class="tuple-detail">
+                                        δ : Q × Σ → Q. Fungsi yang menentukan perpindahan state dari satu state ke state lain saat mesin membaca suatu input (dapat dilihat di Log Simulasi).
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tuple-symbol">q0</div>
+                                <div class="tuple-desc">
+                                    <div class="tuple-title">State Awal (Initial State)</div>
+                                    <div class="tuple-detail">
+                                        State awal mesin (<code>q_&lt;0,0,0,0&gt;</code>), merupakan bagian dari himpunan Q, kondisi ketika kata sandi masih kosong.
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tuple-symbol">F</div>
+                                <div class="tuple-desc">
+                                    <div class="tuple-title">Himpunan State Akhir (Accept State)</div>
+                                    <div class="tuple-detail">
+                                        State penerimaan di mana string kata sandi dinilai valid (memenuhi semua kriteria kekuatan). Ditandai dengan state <code>q_&lt;1,1,1,1&gt;</code>.
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Studi Kasus pada Aplikasi -->
+            <div class="glass-card p-4 fade-in fade-in-delay-3">
+                <div class="card-header-custom">
+                    <div class="card-icon green"><i class="bi bi-shield-check"></i></div>
+                    <div>
+                        <div class="card-title">Penerapan DFA Pada Validasi Kata Sandi</div>
+                        <div class="card-subtitle">Cara Kerja Sistem Keamanan Validator Ini</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.6; text-align: justify;">
+                            Aplikasi ini memodelkan kata sandi yang kuat dengan sebuah DFA berstatus banyak (State direpresentasikan dengan vektor kondisi: <code>&lt;lower, upper, digit, special&gt;</code>). Setiap kali Anda mengetik satu karakter:
+                        </p>
+                        <ol style="color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; margin-left: 1rem;">
+                            <li>Aplikasi mengambil huruf yang baru Anda ketik.</li>
+                            <li>Melakukan pengecekan kelas karakter (huruf, angka, dll).</li>
+                            <li>Memperbarui vektor status (dari 0 menjadi 1 pada indikator bersangkutan).</li>
+                            <li>Transisi terjadi dan tercatat di Log Simulasi.</li>
+                            <li>Apabila terdapat spasi, mesin langsung berpindah ke <code>Trap State</code>, yang mana membuat string apapun ditolak.</li>
+                        </ol>
+                        
+                        <div class="alert bg-secondary text-light mt-3" style="border: 1px solid rgba(255,255,255,0.1); border-radius:10px; font-size: 0.85rem;">
+                            <i class="bi bi-info-circle-fill text-info me-2"></i>
+                            <strong>Catatan:</strong> Meskipun DFA yang digunakan di atas belum menghitung panjang karakter pada proses logikanya (mencegah ledakan jumlah state secara eksponensial), validasi panjang karakter (8-32) ditambahkan pada tahap verifikasi akhir saat mesin mengevaluasi <strong>Accept State</strong>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End Vertical Stack -->
+    </main>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Sidebar Mobile Toggle Script -->
+<script>
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function openSidebar() {
+        sidebar.classList.add('open'); overlay.classList.add('active');
+        sidebarToggle.innerHTML = '<i class="bi bi-x-lg"></i>';
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('open'); overlay.classList.remove('active');
+        sidebarToggle.innerHTML = '<i class="bi bi-list"></i>';
+    }
+
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+
+    overlay.addEventListener('click', closeSidebar);
+</script>
+
+</body>
+</html>

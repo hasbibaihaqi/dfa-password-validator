@@ -1,0 +1,72 @@
+/* ================================================================
+   TABLE & LOG SIMULATION STYLES
+   ================================================================ */
+
+.table-responsive {
+    width: 100%;
+    max-height: 350px;
+    overflow-x: auto;
+    overflow-y: auto;
+    border-radius: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.2) transparent;
+}
+
+.table-glass {
+    width: 100%;
+    min-width: 600px; /* Force minimum width to prevent column squishing */
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+}
+
+.table-glass thead th {
+    position: sticky;
+    top: 0;
+    background: rgba(5, 13, 26, 0.95); /* Solid enough to hide content scrolling under it */
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.4);
+    border-bottom: 2px solid var(--glass-border);
+}
+
+.table-glass tbody td {
+    padding: 0.65rem 1rem;
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s ease;
+}
+
+.table-glass tbody tr:hover td { background: rgba(255,255,255,0.04); }
+.table-glass tbody tr.row-trap td { color: rgba(255, 77, 109, 0.8); }
+
+.table-glass td code {
+    font-family: var(--font-mono);
+    color: var(--clr-primary);
+    background: var(--clr-primary-dim);
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+}
+
+/* History Badges */
+.badge-accept {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(0, 229, 160, 0.12); color: var(--clr-success);
+    border: 1px solid rgba(0, 229, 160, 0.25); padding: 0.3rem 0.75rem;
+    border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+}
+
+.badge-reject {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(255, 77, 109, 0.12); color: var(--clr-danger);
+    border: 1px solid rgba(255, 77, 109, 0.25); padding: 0.3rem 0.75rem;
+    border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+}

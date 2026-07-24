@@ -1,0 +1,18 @@
+/* ================================================================
+   DFA Password Validator — Modular Stylesheet
+   ================================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+@import url('layout.css');
+@import url('dfa.css');
+@import url('table.css');
+@import url('dashboard.css');
+@import url('animation.css');
+@import url('responsive.css');
+
+/* Bootstrap utility overrides */
+.text-info    { color: var(--clr-primary) !important; }
+.text-success { color: var(--clr-success) !important; }
+.text-danger  { color: var(--clr-danger) !important; }
+.text-warning { color: var(--clr-warning) !important; }
+.bg-secondary { background-color: rgba(255,255,255,0.1) !important; }

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFA Auth — Password Validator</title>
+    <meta name="description" content="Validasi kekuatan password menggunakan simulasi Deterministic Finite Automaton (DFA). Visualisasi transisi state secara real-time.">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Main Modular CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Mobile Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Mobile Sidebar Toggle -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+    <i class="bi bi-list"></i>
+</button>
+
+<!-- App Wrapper -->
+<div class="app-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="glass-sidebar" id="sidebar">
+        <!-- Brand -->
+        <a href="/" class="sidebar-brand" style="text-decoration:none;">
+            <div class="brand-icon-wrap">
+                <i class="bi bi-shield-lock-fill"></i>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">DFA Auth</span>
+                <span class="brand-sub">Password Validator</span>
+            </div>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Menu</div>
+            <a href="/" class="sidebar-link active" id="nav-validator">
+                <i class="bi bi-key-fill nav-icon"></i>
+                <span class="nav-label">Validator</span>
+            </a>
+            <a href="/dashboard" class="sidebar-link" id="nav-dashboard">
+                <i class="bi bi-speedometer2 nav-icon"></i>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <div class="nav-section-label" style="margin-top:1rem;">Informasi</div>
+            <a href="/about" class="sidebar-link" id="nav-about">
+                <i class="bi bi-diagram-3 nav-icon"></i>
+                <span class="nav-label">Tentang DFA</span>
+            </a>
+        </nav>
+
+        <!-- Footer -->
+        <div class="sidebar-footer">
+            <p class="sidebar-footer-text">DFA Auth v1.0 &copy; 2025</p>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header fade-in">
+            <div class="page-header-left">
+                <h1>Password Validator</h1>
+                <p>Simulasi Deterministic Finite Automaton (DFA)</p>
+            </div>
+            <div class="header-badge">
+                <span class="dot"></span>
+                DFA Engine Active
+            </div>
+        </div>
+
+        <!-- Vertical Stack Layout -->
+        <div class="vertical-stack">
+
+            <!-- 1. Input Panel & Rules (100% Width) -->
+            <div class="glass-card p-4 fade-in fade-in-delay-1">
+                <div class="card-header-custom">
+                    <div class="card-icon cyan"><i class="bi bi-key-fill"></i></div>
+                    <div>
+                        <div class="card-title">Evaluasi Kata Sandi</div>
+                        <div class="card-subtitle">Masukkan password dan perhatikan indikator kekuatan</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Password Input -->
+                        <div class="input-wrapper">
+                            <label class="input-label" for="passwordInput">Input Password</label>
+                            <div class="glass-input-group">
+                                <input type="password" id="passwordInput" class="glass-input form-control" placeholder="Masukkan password Anda..." autocomplete="new-password">
+                                <button class="toggle-btn" type="button" id="togglePassword" aria-label="Toggle visibility"><i class="bi bi-eye"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Strength Meter -->
+                        <div class="strength-section">
+                            <div class="strength-header">
+                                <span class="strength-label">Kekuatan Password</span>
+                                <span id="strengthText" class="strength-badge bg-secondary text-light">Unknown</span>
+                            </div>
+                            <div class="strength-bar-track">
+                                <div id="strengthBar" class="strength-bar-fill" style="width:0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="rules-title mt-lg-0 mt-3">Syarat DFA (Accept State)</div>
+                        <ul class="rules-list" id="rulesChecklist">
+                            <li id="rule-len"><i class="bi bi-x-circle-fill text-danger me-2"></i> 8 – 32 Karakter</li>
+                            <li id="rule-low"><i class="bi bi-x-circle-fill text-danger me-2"></i> Huruf Kecil (a–z)</li>
+                            <li id="rule-up"><i class="bi bi-x-circle-fill text-danger me-2"></i> Huruf Besar (A–Z)</li>
+                            <li id="rule-num"><i class="bi bi-x-circle-fill text-danger me-2"></i> Angka (0–9)</li>
+                            <li id="rule-spc"><i class="bi bi-x-circle-fill text-danger me-2"></i> Spesial (!@#...)</li>
+                            <li id="rule-ws"><i class="bi bi-check-circle-fill text-success me-2"></i> Tanpa Spasi</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. DFA Visualizer Card (100% Width) -->
+            <div class="glass-card p-4 fade-in fade-in-delay-2">
+                <div class="card-header-custom">
+                    <div class="card-icon green"><i class="bi bi-diagram-3-fill"></i></div>
+                    <div>
+                        <div class="card-title">Visualisasi Transisi State</div>
+                        <div class="card-subtitle">Perpindahan state mesin DFA secara real-time berdasarkan input</div>
+                    </div>
+                </div>
+
+                <!-- Custom DFA container with built-in horizontal scroll -->
+                <div id="dfaVisualizer" class="dfa-visualizer-wrap">
+                    <span class="dfa-empty-msg">
+                        <i class="bi bi-arrow-right-circle me-2"></i>
+                        Ketik password untuk memulai simulasi transisi state...
+                    </span>
+                </div>
+            </div>
+
+            <!-- 3. Simulation Log Card (100% Width) -->
+            <div class="glass-card p-4 fade-in fade-in-delay-3">
+                <div class="card-header-custom">
+                    <div class="card-icon orange"><i class="bi bi-table"></i></div>
+                    <div>
+                        <div class="card-title">Log Simulasi Transisi</div>
+                        <div class="card-subtitle">Fungsi transisi δ(q, σ) direkam setiap kali karakter dibaca</div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table-glass">
+                        <thead>
+                            <tr>
+                                <th>Input (σ)</th>
+                                <th>State Asal (q)</th>
+                                <th>Fungsi Transisi δ(q, σ)</th>
+                                <th>State Tujuan (q')</th>
+                            </tr>
+                        </thead>
+                        <tbody id="simulationLog">
+                            <tr>
+                                <td colspan="4" class="text-secondary" style="font-family:var(--font-mono); font-size:0.85rem; padding: 2rem;">
+                                    <i class="bi bi-hourglass-split me-2"></i>Menunggu input dari user...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div> <!-- End Vertical Stack -->
+    </main>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- App Scripts -->
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dfa_viz.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+
+<!-- Sidebar Mobile Toggle Script -->
+<script>
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function openSidebar() {
+        sidebar.classList.add('open'); overlay.classList.add('active');
+        sidebarToggle.innerHTML = '<i class="bi bi-x-lg"></i>';
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('open'); overlay.classList.remove('active');
+        sidebarToggle.innerHTML = '<i class="bi bi-list"></i>';
+    }
+
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+
+    overlay.addEventListener('click', closeSidebar);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+/* ================================================================
+   DFA VISUALIZATION STYLES
+   ================================================================ */
+
+.dfa-visualizer-wrap {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    min-height: 120px;
+    display: block; /* Removed flex from parent to allow scrolling */
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 1.5rem 1rem;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.dfa-empty-msg {
+    color: rgba(255,255,255,0.25);
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    display: inline-block;
+    padding: 1rem;
+}
+
+/* Inner container for DFA track */
+.dfa-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: max-content; /* Ensure it expands to fit children */
+    padding-right: 2rem;
+}
+
+/* Node Styles */
+.dfa-node {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0; /* Crucial to prevent squishing */
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.dfa-node:hover {
+    transform: translateY(-3px) scale(1.05);
+    z-index: 5;
+}
+
+.dfa-node.active-state {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--clr-primary-glow);
+    border-color: var(--clr-primary);
+    z-index: 10;
+}
+
+.dfa-node.initial {
+    background: rgba(107, 114, 128, 0.2); color: #9ca3af;
+    border-color: rgba(107, 114, 128, 0.4);
+}
+.dfa-node.normal {
+    background: rgba(99, 102, 241, 0.2); color: #a5b4fc;
+    border-color: rgba(99, 102, 241, 0.4);
+}
+.dfa-node.trap {
+    background: rgba(255, 77, 109, 0.15); color: var(--clr-danger);
+    border-color: rgba(255, 77, 109, 0.4);
+}
+.dfa-node.accept {
+    background: rgba(0, 229, 160, 0.15); color: var(--clr-success);
+    border-color: rgba(0, 229, 160, 0.4);
+    box-shadow: 0 0 15px rgba(0, 229, 160, 0.3);
+}
+.dfa-node.reject {
+    background: rgba(255, 77, 109, 0.15); color: var(--clr-danger);
+    border-color: rgba(255, 77, 109, 0.4);
+    box-shadow: 0 0 15px rgba(255, 77, 109, 0.3);
+}
+
+/* DFA Arrow */
+.dfa-arrow {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0.25rem;
+    color: rgba(255,255,255,0.2);
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    gap: 2px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.dfa-arrow .char-label {
+    color: var(--clr-primary);
+    font-weight: 700;
+    font-size: 0.65rem;
+    line-height: 1;
+    background: rgba(0, 212, 255, 0.1);
+    padding: 0.1rem 0.3rem;
+    border-radius: 4px;
+}
+
+.dfa-arrow .arrow-icon { font-size: 0.85rem; color: rgba(255, 255, 255, 0.4); }
