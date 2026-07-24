@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from config import Config
 from models.history import db
@@ -7,6 +8,10 @@ from flask_migrate import Migrate
 migrate = Migrate()
 
 def create_app():
+    # Pastikan folder database ada sebelum aplikasi dijalankan
+    if not os.path.exists('database'):
+        os.makedirs('database')
+
     app = Flask(__name__)
     app.config.from_object(Config)
 
@@ -24,10 +29,5 @@ def create_app():
     return app
 
 if __name__ == '__main__':
-    # Pastikan folder database ada sebelum aplikasi dijalankan
-    import os
-    if not os.path.exists('database'):
-        os.makedirs('database')
-        
     app = create_app()
     app.run(debug=True)
