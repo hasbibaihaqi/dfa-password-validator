@@ -19,6 +19,10 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # TAMBAHAN BARU: Otomatis membuat tabel database jika belum ada
+    with app.app_context():
+        db.create_all()
+
     # Mendaftarkan Controllers / Blueprints yang sudah dibuat
     from controllers.views import views_bp
     from controllers.api import api_bp
